@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hashem Otoom</title>
+    
+    <!-- SEO Meta Tags for Google -->
+    <meta name="description" content="Portfolio of Hashem Otoom, a Fullstack Web Developer and CS Student at the University of Jordan. Specializing in Web Dev, Game Development, and Cyber Security.">
+    <meta name="keywords" content="Hashem Otoom, Software Developer, Fullstack Developer, Web Developer, University of Jordan, Game Dev, Cyber Security, Three.js Portfolio, 3D Website">
+    <meta name="author" content="Hashem Otoom">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Social Media Meta Tags (Makes your link look good when shared) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Hashem Otoom - Software Developer Portfolio">
+    <meta property="og:description" content="Check out my immersive 3D portfolio featuring Fullstack Web Dev, Game Dev, and Cyber Security projects.">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap');
+
+        :root {
+            --accent: #00ff88;
+            --dark: #050505;
+            --text: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--text);
+            background: var(--dark);
+            overflow-x: hidden; /* Hide horizontal scrollbar */
+        }
+
+        /* The 3D Canvas matches viewport but stays fixed in background */
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            outline: none;
+        }
+
+        /* Main Content Overlay */
+        main {
+            position: absolute;
+            width: 100%;
+            z-index: 10;
+        }
+
+        /* Sections */
+        section {
+            display: grid;
+            place-items: center;
+            align-content: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translateZ(0); /* Hardware accel for smooth scroll */
+        }
+
+        /* Typography & Layouts */
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 4rem;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #fff, #aaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            color: #d1d1d1;
+        }
+
+        /* Project Cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            width: 100%;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 8px;
+            transition: transform 0.3s ease, background 0.3s ease;
+            cursor: default;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--accent);
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .btn:hover {
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            transform: scale(1.05);
+        }
+
+        /* Layout Alignment Helpers */
+        .align-left { text-align: left; align-items: start; }
+        .align-right { text-align: right; align-items: end; }
+        .align-center { text-align: center; }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            h1 { font-size: 3rem; }
+            h2 { font-size: 2rem; }
+            section { padding: 4rem 1rem; }
+            .align-left, .align-right { text-align: center; align-items: center; }
+        }
+        
+        /* Scroll Indicator */
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0) translateX(-50%);}
+            40% {transform: translateY(-10px) translateX(-50%);}
+            60% {transform: translateY(-5px) translateX(-50%);}
+        }
+
+    </style>
+</head>
+<body>
+
+    <canvas id="bg"></canvas>
+
+    <main>
+        <!-- Intro Section -->
+        <section>
+            <div class="container align-center">
+                <header>
+                    <p>Hello, I am</p>
+                    <h1>Hashem Otoom</h1>
+                    <p>Software Developer & CS Major</p>
+                </header>
+                <a href="#projects" class="btn">View My Code</a>
+                <div class="scroll-down">↓</div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="align-left">
+            <div class="container">
+                <h2>About Me</h2>
+                <p>
+                    I am a <strong>Fullstack Web Developer</strong> currently majoring in Computer Science at the <strong>University of Jordan</strong>. 
+                    Born in 2007, I've been coding with a focus on efficiency and modern web standards, maintaining a straight academic path.
+                </p>
+                <p>
+                    Beyond the web, I have a strong passion for <strong>Game Development</strong> and <strong>Cyber Security</strong>. 
+                    Whether I'm securing endpoints or building virtual worlds, I love solving complex problems.
+                </p>
+                <p>
+                    <em>Fun fact: I probably like donuts more than I like debugging.</em>
+                </p>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects">
+            <div class="container" style="max-width: 1000px;">
+                <h2 style="text-align: center;">My Tech Stack</h2>
+                <div class="grid">
+                    <!-- Project 1 -->
+                    <div class="card">
+                        <h3>Fullstack Web</h3>
+                        <p>Building scalable web applications with modern frameworks. Focusing on responsive frontends and robust backends.</p>
+                        <small>Tech: React, Node.js, SQL</small>
+                    </div>
+                    <!-- Project 2 -->
+                    <div class="card">
+                        <h3>Game Development</h3>
+                        <p>Creating immersive interactive experiences. I love exploring game mechanics and graphics programming.</p>
+                        <small>Tech: Unity/Unreal, C#</small>
+                    </div>
+                    <!-- Project 3 -->
+                    <div class="card">
+                        <h3>Cyber Security</h3>
+                        <p>Understanding vulnerabilities to build safer software. Interested in pen-testing and secure coding practices.</p>
+                        <small>Tech: Python, Linux, NetSec</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="align-right">
+            <div class="container">
+                <h2>Let's Connect</h2>
+                <p>
+                    I'm currently balancing my university studies with development projects.
+                    Always open to discussing new ideas in tech!
+                </p>
+                <button id="emailBtn" class="btn" style="border: none; cursor: pointer; font-family: inherit; font-size: 0.9rem;">
+                    hotoom20@gmail.com (Click to Copy)
+                </button>
+            </div>
+        </section>
+        
+        <!-- Footer Spacer -->
+        <div style="height: 200px;"></div>
+    </main>
+
+    <script>
+        // Simple clipboard functionality to avoid mailto
+        document.getElementById('emailBtn').addEventListener('click', function() {
+            const textarea = document.createElement('textarea');
+            textarea.value = 'hotoom20@gmail.com';
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            
+            const originalText = this.innerText;
+            this.innerText = 'Email Copied!';
+            setTimeout(() => {
+                this.innerText = originalText;
+            }, 2000);
+        });
+    </script>
+
+    <!-- Three.js Import Map -->
+    <!-- Using a CDN that supports ES modules directly without build steps -->
+    <script type="module">
+        import * as THREE from 'https://cdn.skypack.dev/three@0.128.0/build/three.module.js';
+
+        // --- 1. SETUP SCENE ---
+        const scene = new THREE.Scene();
+
+        // Fog creates depth fading
+        scene.fog = new THREE.FogExp2(0x050505, 0.0035);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        
+        const renderer = new THREE.WebGLRenderer({
+            canvas: document.querySelector('#bg'),
+            antialias: true // Smoother edges
+        });
+
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.position.setZ(30);
+        camera.position.setX(-3);
+
+        // --- 2. OBJECTS ---
+
+        // A. The "Hero" Object (Torus Knot)
+        const geometry = new THREE.TorusKnotGeometry(10, 3, 100, 16);
+        // Using Standard Material to react to light
+        const material = new THREE.MeshStandardMaterial({ 
+            color: 0x00ff88, 
+            wireframe: true,
+            roughness: 0.5,
+            metalness: 0.8
+        });
+        const torusKnot = new THREE.Mesh(geometry, material);
+        scene.add(torusKnot);
+
+        // B. Particle System (Stars)
+        function addStar() {
+            const geometry = new THREE.SphereGeometry(0.25, 24, 24);
+            const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+            const star = new THREE.Mesh(geometry, material);
+
+            // Random position spread
+            const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(200));
+
+            star.position.set(x, y, z);
+            scene.add(star);
+        }
+        // Create 200 stars
+        Array(200).fill().forEach(addStar);
+
+        // --- 3. LIGHTING ---
+        // Point light acts like a lamp nearby
+        const pointLight = new THREE.PointLight(0xffffff, 1);
+        pointLight.position.set(20, 20, 20);
+
+        // Ambient light lights up everything softly
+        const ambientLight = new THREE.AmbientLight(0x404040, 2); // soft white light
+        
+        // Spotlight for dramatic effect on the knot
+        const spotLight = new THREE.SpotLight(0x00ff88, 2);
+        spotLight.position.set(0, 50, 50);
+        
+        scene.add(pointLight, ambientLight, spotLight);
+
+        // --- 4. ANIMATION LOOP ---
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Rotate the main object constantly
+            torusKnot.rotation.x += 0.005;
+            torusKnot.rotation.y += 0.005;
+            torusKnot.rotation.z += 0.005;
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // --- 5. SCROLL INTERACTION ---
+        function moveCamera() {
+            const t = document.body.getBoundingClientRect().top;
+
+            // Rotate object faster on scroll
+            torusKnot.rotation.x += 0.05;
+            torusKnot.rotation.y += 0.075;
+            torusKnot.rotation.z += 0.05;
+
+            // Move camera
+            camera.position.z = t * -0.01 + 30; // Move closer/further
+            camera.position.x = t * -0.0002 - 3; // Pan slightly
+            camera.rotation.y = t * -0.0002;
+        }
+
+        document.body.onscroll = moveCamera;
+        moveCamera(); // Initial call
+
+        // --- 6. RESIZE HANDLER ---
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+    </script>
+</body>
+</html>
